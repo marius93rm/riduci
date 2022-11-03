@@ -1,20 +1,29 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useReducer } from 'react';
+
+import { View } from 'react-native';
+
+import List from './List';
+import Input from './Input';
+import Title from './Title';
+
+import { actionCreators, reducer, intitialState } from './todos';
+
+
 
 export default function App() {
+  const [state, dispatch] = useReducer(reducer, intitialState);
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+    <View>
+      <Title> TO-DO List </Title>
+      <Input
+        placeholder="Add a todo"
+        onSubmitEditing={text => dispatch(actionCreators.add(text))}
+      />
+      <List
+        list={state.items}
+        onPressItem={index => dispatch(actionCreators.remove(index))}
+      />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
